@@ -2,6 +2,7 @@ import React, { useState } from 'react'
 
 
 import Back from '../assets/backgroundImage.webp';
+import { useNavigate } from 'react-router-dom';
 
 
 
@@ -9,6 +10,9 @@ import Back from '../assets/backgroundImage.webp';
 
 
 const AddUser = () => {
+
+
+  const navigate =  useNavigate();
 
   const [UserName, setUserName] = useState('');
   const [UserEmail, setUserEmail] = useState('');
@@ -55,6 +59,15 @@ const AddUser = () => {
               if(Response.status == 201){
                 setError('')
                 setSuccess("Account Registered Successfully !!")
+
+
+                setTimeout(() => {
+                  
+                navigate('/userlist');
+                
+                }, 1000);
+
+
               }
 
 
