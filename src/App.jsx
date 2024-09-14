@@ -13,6 +13,7 @@ import UserList from './Pages/UserList';
 //-- components
 
 import Navbar from './Components/Navbar';
+import Practice from './Pages/Practice';
 
 
 
@@ -30,6 +31,7 @@ const App = () => {
 
     <Route   path='/'   element={<AddUser/>}    />
     <Route   path='/userlist'   element={<UserList/>}    />
+    <Route   path='/toast'   element={<Practice/>}    />
 
     </Routes>
     

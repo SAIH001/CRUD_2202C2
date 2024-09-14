@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 
 
 import Back from '../assets/backgroundImage.webp';
@@ -12,7 +12,9 @@ import { useNavigate } from 'react-router-dom';
 const AddUser = () => {
 
 
-  const navigate =  useNavigate();
+  const navigate = useNavigate();
+
+  const [GetRoles, setGetRoles] = useState([]);
 
   const [UserName, setUserName] = useState('');
   const [UserEmail, setUserEmail] = useState('');
@@ -25,73 +27,99 @@ const AddUser = () => {
   const [Success, setSuccess] = useState('');
 
 
+  useEffect(() => {
 
-  const handleSubmit = async(e) => {
+    async function getRoles() {
+      const getRoles_Response = await fetch("https://66dfe57b2fb67ac16f277421.mockapi.io/aptechnn/userroles");
+
+      if (getRoles_Response.status === 200) {
+
+        setGetRoles(await getRoles_Response.json())
+
+
+      }
+
+
+
+    }
+
+    getRoles();
+
+  }, []);
+
+
+
+
+
+  const handleSubmit = async (e) => {
     e.preventDefault();
-   
-    if(UserName !=null  && UserName.length >3){
-      if(UserEmail !=null && UserEmail.length >5 ){
-        if(UserPassword!=null && UserPassword.length >3){
-          if(UserCPassword !=null  && UserCPassword.length >3){
 
-            if(UserPassword == UserCPassword){
+    if (UserName != null && UserName.length > 3) {
+      if (UserEmail != null && UserEmail.length > 5) {
+        if (UserPassword != null && UserPassword.length > 3) {
+          if (UserCPassword != null && UserCPassword.length > 3) {
+
+            if (UserPassword == UserCPassword) {
+
+              if(UserRole === "Admin" || UserRole === "Customer" || UserRole === "Agent" ){
+
+              try {
+
+                const newUser = {
+                  userName: UserName,
+                  userEmail: UserEmail,
+                  userPassword: UserPassword,
+                  userRole: UserRole,
+
+                }
 
 
-             try{
 
-              const newUser =  {
-                userName:UserName ,
-                userEmail:UserEmail ,
-                userPassword: UserPassword,
-                userRole: UserRole,
-               
+                const Response = await fetch("https://66dfe57b2fb67ac16f277421.mockapi.io/aptechnn/userAccount", {
+                  method: 'POST',
+                  headers: { 'Content-Type': 'application/json' },
+                  body: JSON.stringify(newUser)
+                })
+
+
+                if (Response.status == 201) {
+                  setError('')
+                  setSuccess("Account Registered Successfully !!")
+
+
+                  setTimeout(() => {
+
+                    navigate('/userlist');
+
+                  }, 1000);
+
+
+                }
+
+
+              } catch (error) {
+                console.log(error)
               }
-
-
-
-              const Response  = await fetch("https://66dfe57b2fb67ac16f277421.mockapi.io/aptechnn/userAccount",{
-                method:'POST',
-                headers:{ 'Content-Type':'application/json'},
-                body:JSON.stringify(newUser)
-              })
-
-
-              if(Response.status == 201){
-                setError('')
-                setSuccess("Account Registered Successfully !!")
-
-
-                setTimeout(() => {
-                  
-                navigate('/userlist');
-                
-                }, 1000);
-
-
-              }
-
-
-             }catch(error){
-              console.log(error)
-             }
-
-
 
 
 
             }else{
+              setError("Role must admin , customer or agent !!")
+            }
+
+            } else {
               setError("Password must be equal to Confirm Password")
             }
-          }else{
+          } else {
             setError("Confirm Password must be there")
           }
-        }else{
+        } else {
           setError("Password must strong")
         }
-      }else{
+      } else {
         setError("Email is not valid")
       }
-    }else{
+    } else {
       setError("Username is not valid ")
     }
 
@@ -126,7 +154,7 @@ const AddUser = () => {
 
 
                           <div className="alert alert-danger" role="alert">
-                           <p>{Error}</p>
+                            <p>{Error}</p>
                           </div>
 
                         </>
@@ -139,7 +167,7 @@ const AddUser = () => {
 
 
                           <div className="alert alert-success" role="alert">
-                           <p>{Success}</p>
+                            <p>{Success}</p>
                           </div>
 
                         </>
@@ -183,8 +211,26 @@ const AddUser = () => {
                         <label className="form-label" htmlFor="form3Example4cdg">Role</label>
                         <select className="form-control" onChange={(e) => setUserRole(e.target.value)} >
                           <option value="none">Choose Role</option>
-                          <option value="admin">Admin</option>
-                          <option value="customer">Customer</option>
+
+                          {
+
+                            GetRoles.map((role,index) => {
+                              return (
+                                <>
+
+                                <option key={index}  value={role.Roles}>   {role.Roles}    </option>
+
+
+                                </>
+                              )
+                            })
+
+
+                          }
+
+
+
+
                         </select>
                       </div>
 
