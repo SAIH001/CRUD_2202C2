@@ -14,6 +14,7 @@ import UserList from './Pages/UserList';
 
 import Navbar from './Components/Navbar';
 import Practice from './Pages/Practice';
+import UpdateUser from './Pages/UpdateUser';
 
 
 
@@ -32,6 +33,7 @@ const App = () => {
     <Route   path='/'   element={<AddUser/>}    />
     <Route   path='/userlist'   element={<UserList/>}    />
     <Route   path='/toast'   element={<Practice/>}    />
+    <Route   path='/updateUser/:id'   element={<UpdateUser/>}    />
 
     </Routes>
     

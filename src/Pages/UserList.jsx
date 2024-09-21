@@ -1,6 +1,9 @@
 import React, { useEffect, useState } from 'react'
+import { Link } from 'react-router-dom';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+
+
 
 
 const UserList = () => {
@@ -105,7 +108,7 @@ const DeleteUser  = async(userid,username) =>{
                       <td>{user.userRole}</td>
                       <td>
 
-                        <button className='btn btn-dark btn-sm mx-2'>Update</button>
+                        <Link className='btn btn-dark btn-sm mx-2'   to={`/updateUser/${user.id}`}  >Update</Link>
                         <button className='btn btn-danger btn-sm'  onClick={()=>DeleteUser(user.id,user.userName)}  >Delete</button>
 
 
